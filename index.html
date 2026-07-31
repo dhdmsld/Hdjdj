@@ -3,348 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ساعت عنکبوتی</title>
-
-    <!-- کتابخانه‌های GSAP (حتماً آنلاین) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MorphSVGPlugin.min.js"></script>
-
+    <title>ساعت لوکس تهران</title>
+    <!-- فونت لاتین برای اعداد و استایل -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== ریست و پس‌زمینه ===== */
+        /* ========== ریست کامل ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
+
         body {
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #232526 0%, #414345 100%);
-            color: #fef97b;
-            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+            font-family: 'Playfair Display', serif;
             overflow: hidden;
         }
 
-        /* ===== محفظه‌ی ساعت ===== */
-        #clock-wrapper {
+        /* ========== محفظه ساعت ========== */
+        .clock-container {
             position: relative;
-            aspect-ratio: 1/1;
-            width: 65vh;          /* در حالت افقی */
-        }
-        @media (orientation: portrait) {
-            #clock-wrapper {
-                width: 85vw;      /* در حالت عمودی */
-            }
+            width: 70vmin;
+            height: 70vmin;
+            max-width: 600px;
+            max-height: 600px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #2b2b3a, #14141e);
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                inset 0 -10px 30px rgba(255, 215, 0, 0.2),
+                inset 0 10px 30px rgba(255, 215, 0, 0.1),
+                0 0 0 8px #3a3a4a,
+                0 0 0 12px #1f1f2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
         }
 
-        /* ===== استایل SVG ===== */
+        /* حلقه طلایی دور ساعت */
+        .clock-container::before {
+            content: '';
+            position: absolute;
+            inset: -14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4af37, #f9d976, #d4af37);
+            z-index: -1;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+        }
+
+        /* ========== SVG ساعت ========== */
         #clock-svg {
-            width: 100%;
-            height: 100%;
+            width: 92%;
+            height: 92%;
             display: block;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #2e2e40, #15151f);
+            box-shadow: inset 0 10px 40px rgba(0, 0, 0, 0.7);
         }
 
-        /* ===== چرخ‌دنده‌ها (ظاهر) ===== */
-        .cog {
-            fill: #f7f586;
-            opacity: 0.3;
-        }
-        /* کلاس‌های جهت چرخش (با انیمیشن CSS ساده) */
-        .cw  { animation: spin-cw  8s linear infinite; }
-        .ccw { animation: spin-ccw 8s linear infinite; }
-
-        @keyframes spin-cw {
-            to { transform: rotate(360deg); }
-        }
-        @keyframes spin-ccw {
-            to { transform: rotate(-360deg); }
-        }
-
-        /* ===== اعداد ساعت ===== */
-        .hour-number {
-            fill: #fef97b;
-            font-size: 18px;
-            font-weight: bold;
+        /* ========== اعداد ========== */
+        .num {
+            fill: #e8d5a3;
+            font-size: 28px;
+            font-weight: 700;
             text-anchor: middle;
             dominant-baseline: central;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            font-family: 'Playfair Display', serif;
         }
 
-        /* ===== عقربه‌ها ===== */
-        .hand {
-            stroke: #fef97b;
+        /* خطوط کوچک (تیک‌ها) */
+        .tick {
+            stroke: #b89d6b;
+            stroke-width: 2;
             stroke-linecap: round;
         }
-        #hand-hour {
-            stroke-width: 5;
-        }
-        #hand-minute {
+        .tick-big {
+            stroke: #d4af37;
             stroke-width: 4;
         }
-        #hand-second {
-            stroke-width: 2;
-            stroke: #ff6b6b;
+
+        /* ========== عقربه‌ها ========== */
+        .hand {
+            stroke-linecap: round;
+            transition: transform 0.1s cubic-bezier(0.4, 2.5, 0.6, 1);
+        }
+        #hour-hand {
+            stroke: #f0e0b0;
+            stroke-width: 7;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+        }
+        #minute-hand {
+            stroke: #f5e8c0;
+            stroke-width: 5;
+            filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.3));
+        }
+        #second-hand {
+            stroke: #ff6b4a;
+            stroke-width: 2.5;
+            filter: drop-shadow(0 0 10px #ff6b4a);
         }
 
-        /* ===== نقطه‌ی مرکزی ===== */
+        /* ========== نقطه مرکزی ========== */
         #center-dot {
-            fill: #fef97b;
+            fill: #d4af37;
+            filter: drop-shadow(0 0 15px #d4af37);
+        }
+        #center-dot-inner {
+            fill: #1a1a2e;
+        }
+
+        /* ========== لوگوی لوکس ========== */
+        .brand {
+            fill: #b89d6b;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-anchor: middle;
+            font-family: 'Playfair Display', serif;
+            opacity: 0.7;
+        }
+
+        /* ========== نمایش تاریخ و روز ========== */
+        .date-text {
+            fill: #c9b07a;
+            font-size: 13px;
+            font-weight: 400;
+            text-anchor: middle;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        /* ========== واکنش‌گرایی ========== */
+        @media (max-width: 500px) {
+            .num { font-size: 18px; }
+            .brand { font-size: 9px; }
+            .date-text { font-size: 10px; }
+            #hour-hand { stroke-width: 5; }
+            #minute-hand { stroke-width: 4; }
+            #second-hand { stroke-width: 2; }
+        }
+
+        /* انیمیشن درخشش ملایم */
+        @keyframes glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .glow {
+            animation: glow 3s ease-in-out infinite;
         }
     </style>
 </head>
 <body>
 
-    <div id="clock-wrapper">
-        <svg id="clock-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+<div class="clock-container">
+    <svg id="clock-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
 
-            <!-- ===== تعریف چرخ‌دنده‌ها (برای استفاده با <use>) ===== -->
-            <defs>
-                <!-- چرخ‌دنده‌ی ساده (cog1) -->
-                <g id="cog1">
-                    <circle cx="0" cy="0" r="30" fill="none" stroke="#f7f586" stroke-width="6"/>
-                    <circle cx="0" cy="0" r="18" fill="#f7f586" opacity="0.2"/>
-                    <path d="M-6,-30 L6,-30 L4,-22 L-4,-22 Z" fill="#f7f586"/>
-                    <path d="M-6,30 L6,30 L4,22 L-4,22 Z" fill="#f7f586"/>
-                    <path d="M-30,-6 L-30,6 L-22,4 L-22,-4 Z" fill="#f7f586"/>
-                    <path d="M30,-6 L30,6 L22,4 L22,-4 Z" fill="#f7f586"/>
-                </g>
-                <!-- چرخ‌دنده‌ی کوچک‌تر (cog2) -->
-                <g id="cog2">
-                    <circle cx="0" cy="0" r="20" fill="none" stroke="#f7f586" stroke-width="4"/>
-                    <circle cx="0" cy="0" r="12" fill="#f7f586" opacity="0.2"/>
-                    <path d="M-4,-20 L4,-20 L3,-15 L-3,-15 Z" fill="#f7f586"/>
-                    <path d="M-4,20 L4,20 L3,15 L-3,15 Z" fill="#f7f586"/>
-                    <path d="M-20,-4 L-20,4 L-15,3 L-15,-3 Z" fill="#f7f586"/>
-                    <path d="M20,-4 L20,4 L15,3 L15,-3 Z" fill="#f7f586"/>
-                </g>
-                <!-- چرخ‌دنده‌ی دیگر (cog5) -->
-                <g id="cog5">
-                    <circle cx="0" cy="0" r="25" fill="none" stroke="#f7f586" stroke-width="5"/>
-                    <circle cx="0" cy="0" r="15" fill="#f7f586" opacity="0.2"/>
-                    <path d="M-5,-25 L5,-25 L4,-18 L-4,-18 Z" fill="#f7f586"/>
-                    <path d="M-5,25 L5,25 L4,18 L-4,18 Z" fill="#f7f586"/>
-                    <path d="M-25,-5 L-25,5 L-18,4 L-18,-4 Z" fill="#f7f586"/>
-                    <path d="M25,-5 L25,5 L18,4 L18,-4 Z" fill="#f7f586"/>
-                </g>
+        <!-- ===== تعریف فیلتر سایه‌ی نرم ===== -->
+        <defs>
+            <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.5"/>
+            </filter>
+            <filter id="gold-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+        </defs>
 
-                <!-- ===== صورت‌های ساعت برای انیمیشن Morph ===== -->
-                <g id="face-normal">
-                    <circle cx="250" cy="250" r="200" fill="none" stroke="#fef97b" stroke-width="2" opacity="0.3"/>
-                    <circle cx="250" cy="250" r="190" fill="none" stroke="#fef97b" stroke-width="1" opacity="0.2"/>
-                    <!-- خط‌های کوچک دور تا دور (مثل ساعت) -->
-                    <g id="ticks">
-                        <!-- ۱۲ تیک بزرگ و ۶۰ تیک کوچک رو می‌تونیم با تکرار بسازیم، ولی اینجا فقط چندتا نمونه می‌ذاریم -->
-                    </g>
-                </g>
+        <!-- ===== دایره‌های پس‌زمینه ===== -->
+        <circle cx="250" cy="250" r="235" fill="none" stroke="#3a3a4e" stroke-width="1" opacity="0.3"/>
+        <circle cx="250" cy="250" r="225" fill="none" stroke="#2a2a3e" stroke-width="0.5" opacity="0.5"/>
 
-                <g id="face-spider">
-                    <circle cx="250" cy="250" r="200" fill="none" stroke="#ff6b6b" stroke-width="2" opacity="0.5"/>
-                    <circle cx="250" cy="250" r="190" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.3"/>
-                    <!-- اضافه کردن چند خط منحنی مانند تار عنکبوت -->
-                    <path d="M50,250 Q150,100 250,250 Q350,400 450,250" fill="none" stroke="#fef97b" stroke-width="1" opacity="0.3"/>
-                    <path d="M250,50 Q100,150 250,250 Q400,350 250,450" fill="none" stroke="#fef97b" stroke-width="1" opacity="0.3"/>
-                </g>
+        <!-- ===== ۶۰ خطک (تیک) ===== -->
+        <g id="ticks">
+            <!-- اینجا با استفاده از JS در پایین تولید می‌شود، ولی برای نمایش اولیه چندتا نمونه می‌گذاریم -->
+        </g>
 
-                <!-- عقربه‌ی ثانیه به دو شکل برای Morph -->
-                <g id="handSec-normal">
-                    <line x1="250" y1="250" x2="250" y2="70" stroke="#ff6b6b" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="250" cy="250" r="6" fill="#ff6b6b"/>
-                </g>
-                <g id="handSec-spider">
-                    <line x1="250" y1="250" x2="250" y2="60" stroke="#fef97b" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="240" y1="80" x2="260" y2="80" stroke="#fef97b" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="250" cy="250" r="8" fill="#fef97b"/>
-                </g>
-            </defs>
+        <!-- ===== اعداد ۱ تا ۱۲ ===== -->
+        <g id="numbers">
+            <text x="250" y="55"  class="num">۱۲</text>
+            <text x="348" y="95"  class="num">۱</text>
+            <text x="405" y="160" class="num">۲</text>
+            <text x="425" y="250" class="num">۳</text>
+            <text x="405" y="340" class="num">۴</text>
+            <text x="348" y="405" class="num">۵</text>
+            <text x="250" y="445" class="num">۶</text>
+            <text x="152" y="405" class="num">۷</text>
+            <text x="95"  y="340" class="num">۸</text>
+            <text x="75"  y="250" class="num">۹</text>
+            <text x="95"  y="160" class="num">۱۰</text>
+            <text x="152" y="95"  class="num">۱۱</text>
+        </g>
 
-            <!-- ===== چرخ‌دنده‌های متحرک (با کلاس‌های cw/ccw) ===== -->
-            <g transform="translate(120, 120)">
-                <use href="#cog1" class="cog cw" />
-            </g>
-            <g transform="translate(380, 120)">
-                <use href="#cog2" class="cog ccw" />
-            </g>
-            <g transform="translate(380, 380)">
-                <use href="#cog5" class="cog cw" />
-            </g>
-            <g transform="translate(120, 380)">
-                <use href="#cog2" class="cog ccw" />
-            </g>
-            <g transform="translate(250, 100)">
-                <use href="#cog1" class="cog cw" transform="scale(0.7)" />
-            </g>
+        <!-- ===== برند / لوگو ===== -->
+        <text x="250" y="390" class="brand">TEHRAN</text>
+        <text x="250" y="408" class="brand" style="font-size:8px; letter-spacing:2px;">LUXURY</text>
 
-            <!-- ===== صورت ساعت (برای Morph) ===== -->
-            <use href="#face-normal" id="face" />
+        <!-- ===== نمایش تاریخ ===== -->
+        <text id="date-display" x="250" y="430" class="date-text">---</text>
 
-            <!-- ===== اعداد ۱ تا ۱۲ ===== -->
-            <g class="hour-numbers">
-                <text x="250" y="80"  class="hour-number">۱۲</text>
-                <text x="340" y="110" class="hour-number">۱</text>
-                <text x="390" y="170" class="hour-number">۲</text>
-                <text x="410" y="250" class="hour-number">۳</text>
-                <text x="390" y="330" class="hour-number">۴</text>
-                <text x="340" y="390" class="hour-number">۵</text>
-                <text x="250" y="420" class="hour-number">۶</text>
-                <text x="160" y="390" class="hour-number">۷</text>
-                <text x="110" y="330" class="hour-number">۸</text>
-                <text x="90"  y="250" class="hour-number">۹</text>
-                <text x="110" y="170" class="hour-number">۱۰</text>
-                <text x="160" y="110" class="hour-number">۱۱</text>
-            </g>
+        <!-- ===== عقربه‌ها (با مرکز چرخش در ۲۵۰,۲۵۰) ===== -->
+        <!-- عقربه ساعت -->
+        <line id="hour-hand" class="hand" x1="250" y1="250" x2="250" y2="120" transform-origin="250 250"/>
+        <!-- عقربه دقیقه -->
+        <line id="minute-hand" class="hand" x1="250" y1="250" x2="250" y2="85" transform-origin="250 250"/>
+        <!-- عقربه ثانیه -->
+        <line id="second-hand" class="hand" x1="250" y1="280" x2="250" y2="70" transform-origin="250 250"/>
 
-            <!-- ===== عقربه‌ها ===== -->
-            <!-- عقربه‌ی ساعت -->
-            <line id="hand-hour" class="hand" x1="250" y1="250" x2="250" y2="140" />
-            <!-- عقربه‌ی دقیقه -->
-            <line id="hand-minute" class="hand" x1="250" y1="250" x2="250" y2="100" />
-            <!-- عقربه‌ی ثانیه (با قابلیت Morph) -->
-            <g id="hand-second-group">
-                <use href="#handSec-normal" id="hand-second" />
-            </g>
+        <!-- ===== نقطه مرکزی ===== -->
+        <circle id="center-dot" cx="250" cy="250" r="14"/>
+        <circle id="center-dot-inner" cx="250" cy="250" r="7"/>
 
-            <!-- ===== نقطه‌ی مرکزی ===== -->
-            <circle id="center-dot" cx="250" cy="250" r="10" />
+        <!-- المان تزیینی (حلقه طلایی کوچک دور مرکز) -->
+        <circle cx="250" cy="250" r="20" fill="none" stroke="#d4af37" stroke-width="1" opacity="0.3"/>
 
-        </svg>
-    </div>
+    </svg>
+</div>
 
-    <script>
-        // ============================================================
-        //  کد JS – برگرفته از تصویر و تطبیق داده شده با ساعت واقعی
-        // ============================================================
+<script>
+    (function() {
+        "use strict";
 
-        // ---------- انتخاب المان‌ها ----------
-        const hr = document.getElementById('hand-hour');
-        const min = document.getElementById('hand-minute');
-        const secGroup = document.getElementById('hand-second-group');
-        const secUse = document.getElementById('hand-second'); // خود <use>
-        const face = document.getElementById('face');
+        // ========== ۱. تولید تیک‌ها (۶۰ عدد) ==========
+        const ticksContainer = document.getElementById('ticks');
+        const svgNS = "http://www.w3.org/2000/svg";
+        for (let i = 0; i < 60; i++) {
+            const angle = i * 6; // هر تیک ۶ درجه
+            const rad = angle * Math.PI / 180;
+            const r1 = 225, r2 = (i % 5 === 0) ? 210 : 218; // تیک‌های بزرگ در multiples of 5
+            const x1 = 250 + r1 * Math.sin(rad);
+            const y1 = 250 - r1 * Math.cos(rad);
+            const x2 = 250 + r2 * Math.sin(rad);
+            const y2 = 250 - r2 * Math.cos(rad);
+            const tick = document.createElementNS(svgNS, 'line');
+            tick.setAttribute('x1', x1);
+            tick.setAttribute('y1', y1);
+            tick.setAttribute('x2', x2);
+            tick.setAttribute('y2', y2);
+            tick.setAttribute('class', (i % 5 === 0) ? 'tick tick-big' : 'tick');
+            ticksContainer.appendChild(tick);
+        }
 
-        // ---------- توابع محاسبه‌ی زاویه بر اساس زمان واقعی ----------
-        function getHourRotation() {
+        // ========== ۲. عناصر عقربه‌ها ==========
+        const hourHand = document.getElementById('hour-hand');
+        const minuteHand = document.getElementById('minute-hand');
+        const secondHand = document.getElementById('second-hand');
+        const dateDisplay = document.getElementById('date-display');
+
+        // ========== ۳. تابع به‌روزرسانی ساعت ==========
+        function updateClock() {
             const now = new Date();
-            const h = now.getHours() % 12;
-            const m = now.getMinutes();
-            // هر ساعت ۳۰ درجه (360/12) + هر دقیقه ۰.۵ درجه (30/60)
-            return (h * 30) + (m * 0.5);
+            // تنظیم منطقه زمانی ایران (UTC+3:30)
+            const iranTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' }));
+            const h = iranTime.getHours() % 12;
+            const m = iranTime.getMinutes();
+            const s = iranTime.getSeconds();
+            const ms = iranTime.getMilliseconds();
+
+            // زاویه‌ها (بر حسب درجه)
+            // عقربه ساعت: ۳۰ درجه به ازای هر ساعت + ۰.۵ درجه به ازای هر دقیقه
+            const hourDeg = (h * 30) + (m * 0.5);
+            // عقربه دقیقه: ۶ درجه به ازای هر دقیقه + ۰.۱ درجه به ازای هر ثانیه
+            const minuteDeg = (m * 6) + (s * 0.1);
+            // عقربه ثانیه: ۶ درجه به ازای هر ثانیه + ۰.۰۰۶ درجه به ازای هر میلی‌ثانیه
+            const secondDeg = (s * 6) + (ms * 0.006);
+
+            // اعمال transform با استفاده از rotate
+            hourHand.setAttribute('transform', `rotate(${hourDeg}, 250, 250)`);
+            minuteHand.setAttribute('transform', `rotate(${minuteDeg}, 250, 250)`);
+            secondHand.setAttribute('transform', `rotate(${secondDeg}, 250, 250)`);
+
+            // ========== ۴. نمایش تاریخ شمسی ==========
+            const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tehran' };
+            const persianDate = new Intl.DateTimeFormat('fa-IR', options).format(iranTime);
+            dateDisplay.textContent = persianDate;
         }
 
-        function getMinuteRotation() {
-            const now = new Date();
-            const m = now.getMinutes();
-            const s = now.getSeconds();
-            // هر دقیقه ۶ درجه (360/60) + هر ثانیه ۰.۱ درجه (6/60)
-            return (m * 6) + (s * 0.1);
-        }
+        // ========== ۵. اجرای اولیه و تنظیم تایمر ==========
+        updateClock();
+        // به‌روزرسانی هر ۱۰۰ میلی‌ثانیه برای حرکت نرم ثانیه
+        setInterval(updateClock, 100);
 
-        function getSecondRotation() {
-            const now = new Date();
-            const s = now.getSeconds();
-            const ms = now.getMilliseconds();
-            // هر ثانیه ۶ درجه + کسر میلی‌ثانیه برای حرکت پیوسته
-            return (s * 6) + (ms * 0.006);
-        }
+        // ========== ۶. (اختیاری) انیمیشن درخشش با کلاس glow ==========
+        // می‌توان به المان‌ها کلاس glow داد، اما همین الان هم زیباست.
 
-        // تابع به‌روزرسانی زمان (برای لاگ یا کارهای دیگر)
-        function setTimeSec() {
-            // می‌توانید اینجا زمان را در کنسول بنویسید یا کار دیگری کنید
-            // console.log('Second updated');
-        }
+        // ========== ۷. تنظیم مجدد در صورت تغییر اندازه پنجره (اختیاری) ==========
+        // نیازی نیست چون SVG مقیاس‌پذیر است.
 
-        // ---------- انیمیشن عقربه‌ی ساعت (با چرخش ۳۶۰ درجه) ----------
-        gsap.to(hr, 0.5, {
-            rotation: getHourRotation,
-            transformOrigin: "50% 50%",
-            ease: "none",
-            onComplete: function () {
-                if (gsap.getProperty(hr, "rotation") >= 360) {
-                    gsap.set(hr, { rotation: 0, transformOrigin: "50% 50%" });
-                    this.invalidate().delay(5).restart(true);
-                }
-            }
-        });
-
-        // ---------- انیمیشن عقربه‌ی دقیقه ----------
-        gsap.to(min, 0.5, {
-            rotation: getMinuteRotation,
-            transformOrigin: "50% 50%",
-            ease: "none",
-            onComplete: function () {
-                if (gsap.getProperty(min, "rotation") >= 360) {
-                    gsap.set(min, { rotation: 0, transformOrigin: "50% 50%" });
-                    this.invalidate().delay(5).restart(true);
-                }
-            }
-        });
-
-        // ---------- انیمیشن عقربه‌ی ثانیه با حالت Bounce ----------
-        gsap.to(secGroup, 0.5, {
-            rotation: getSecondRotation,
-            transformOrigin: "50% 50%",
-            ease: "bounce",
-            onComplete: function () {
-                setTimeSec();
-                if (gsap.getProperty(secGroup, "rotation") >= 360) {
-                    gsap.set(secGroup, { rotation: 0, transformOrigin: "50% 50%" });
-                    this.invalidate().delay(0).restart(true);
-                }
-            }
-        });
-
-        // ---------- تایم‌لاین اول: تغییر چهره (face ↔ face-spider) ----------
-        let tg0 = gsap.timeline({
-            repeat: -1,
-            repeatDelay: 5,
-            defaults: { duration: 0.5, ease: "power1.out" }
-        });
-        tg0.to("#face", {
-            morphSVG: "#face-spider",
-            repeat: 4,
-            yoyo: true,
-            onComplete: function () {
-                // بعد از هر چرخه، تأخیر تصادفی ۰ تا ۰.۲۵ ثانیه
-                tg0.repeatDelay(gsap.utils.random(0, 0.25));
-            }
-        });
-
-        // ---------- تایم‌لاین دوم: تغییر عقربه‌ی ثانیه (بر اساس زاویه) ----------
-        // این تایم‌لاین هر ۵ ثانیه یکبار بررسی می‌کند که اگر عقربه در محدوده‌های خاصی باشد،
-        // عقربه را مورف کند.
-        let tg1 = gsap.timeline({
-            repeat: -1,
-            repeatDelay: 5,
-            defaults: { duration: 1.5, ease: "bounce" }
-        });
-        tg1.delay(1)
-            .call(() => {
-                // گرفتن زاویه‌ی فعلی عقربه‌ی ثانیه (عدد بین ۰ تا ۳۶۰)
-                let rotation = parseFloat(gsap.getProperty(secGroup, "rotation").toFixed(1));
-                // اگر زاویه بین ۳۰ تا ۱۵۰ یا ۲۱۰ تا ۳۳۰ درجه باشد، عقربه را عوض کن
-                if ((rotation > 30 && rotation < 150) || (rotation > 210 && rotation < 330)) {
-                    // یک تایم‌لاین موقت برای Morph عقربه
-                    gsap.timeline({ repeat: 0, defaults: { duration: 0.25, ease: "bounce.in" } })
-                        .to("#hand-second", { morphSVG: "#handSec-spider" })
-                        .to("#hand-second", { morphSVG: "#handSec-normal" });
-                }
-            })
-            .set(secGroup, {
-                onComplete: function () {
-                    // تنظیم تأخیر تصادفی برای تکرار بعدی
-                    tg1.repeatDelay(gsap.utils.random(5, 10, 0.25));
-                    tg1.delay(0);
-                }
-            });
-
-        // ============================================================
-        //  برای اجرای بی‌نهایت و رفرش خودکار، همه‌ی انیمیشن‌ها تنظیم شدن.
-        //  حالا ساعت شما حرکت می‌کند و چهره و عقربه‌ها تغییر شکل می‌دهند.
-        // ============================================================
-    </script>
+        console.log('ساعت لوکس تهران با موفقیت اجرا شد!');
+    })();
+</script>
 
 </body>
-                  </html>
+</html>
