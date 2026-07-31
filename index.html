@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ساعت لوکس شب‌نشین با درخت باد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <title>ساعت کهکشان طلایی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* ===== ریست کامل ===== */
         * {
             margin: 0;
             padding: 0;
@@ -18,115 +17,101 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #0b0b12;
+            background: #050508;
             font-family: 'Playfair Display', serif;
             overflow: hidden;
             user-select: none;
         }
 
-        /* ===== محفظه اصلی ===== */
-        .scene {
+        /* ===== محفظه اصلی با پوستر فوق‌لوکس ===== */
+        .masterpiece {
             position: relative;
-            width: 95vmin;
-            max-width: 800px;
+            width: 98vmin;
+            max-width: 900px;
             aspect-ratio: 1/1;
             border-radius: 50%;
-            background: radial-gradient(circle at 20% 30%, #1c1c2a, #0a0a10);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 0 6px #d4af37, 0 0 0 14px #0f0f1a;
+            box-shadow: 0 50px 120px rgba(0,0,0,0.95), 0 0 0 8px #d4af37, 0 0 0 18px #0a0a12, 0 0 80px rgba(212,175,55,0.3);
+            background: radial-gradient(circle at 20% 20%, #1a1a2e, #0a0a10);
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s;
+            transition: all 0.4s;
         }
 
-        /* حلقه طلایی بیرونی با درخشش */
-        .scene::before {
+        /* حلقه طلایی درخشان بیرونی */
+        .masterpiece::before {
             content: '';
             position: absolute;
-            inset: -18px;
+            inset: -24px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #d4af37, #f9d976, #b8860b);
+            background: conic-gradient(from 0deg, #d4af37, #f9d976, #b8860b, #d4af37, #f9d976, #d4af37);
             z-index: -1;
             opacity: 0.6;
-            filter: blur(4px);
-            animation: glowRing 4s ease-in-out infinite alternate;
+            filter: blur(8px);
+            animation: spinGlow 12s linear infinite;
+        }
+        @keyframes spinGlow {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.05); opacity: 0.8; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.5; }
         }
 
-        @keyframes glowRing {
-            0% { opacity: 0.4; transform: scale(1); }
-            100% { opacity: 0.8; transform: scale(1.02); }
-        }
-
-        /* ===== SVG اصلی ===== */
-        #main-svg {
+        /* ===== SVG پوستر + ساعت ===== */
+        #poster-svg {
             width: 94%;
             height: 94%;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 25%, #1e1e30, #0e0e18);
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.7);
             display: block;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+            background: radial-gradient(circle at 25% 30%, #1c1c30, #0a0a12);
         }
 
-        /* ===== ستاره‌های کوچک (تزئینی) ===== */
-        .star {
+        /* ===== عناصر پوستر (کیفیت بالا) ===== */
+        .nebula {
+            opacity: 0.4;
+            filter: blur(20px);
+            mix-blend-mode: screen;
+        }
+        .nebula-dark {
+            opacity: 0.2;
+            filter: blur(40px);
+        }
+
+        .star-glow {
             fill: #f5f0d7;
-            opacity: 0.6;
-            animation: twinkle 3s ease-in-out infinite alternate;
+            animation: pulseStar 3s ease-in-out infinite alternate;
         }
-        @keyframes twinkle {
-            0% { opacity: 0.2; transform: scale(0.8); }
-            100% { opacity: 0.9; transform: scale(1.2); }
-        }
-
-        /* ===== درخت و برگ‌ها ===== */
-        .tree-trunk {
-            fill: #2d1f14;
-            stroke: #3d2b1a;
-            stroke-width: 1.5;
-        }
-        .branch {
-            fill: none;
-            stroke: #3d2b1a;
-            stroke-width: 3;
-            stroke-linecap: round;
-        }
-        .branch-thin {
-            stroke-width: 1.5;
+        @keyframes pulseStar {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.4); }
         }
 
-        /* برگ‌ها – هر برگ یک کلاس مجزا برای انیمیشن متفاوت */
-        .leaf {
+        .gold-dust {
             fill: #d4af37;
-            opacity: 0.85;
-            transform-origin: center;
-            animation: leafSway var(--dur, 4s) ease-in-out infinite alternate;
+            opacity: 0.15;
+            animation: floatDust 7s ease-in-out infinite alternate;
         }
-        .leaf-dark {
-            fill: #b8860b;
-            opacity: 0.6;
-        }
-        .leaf-light {
-            fill: #f9d976;
-            opacity: 0.7;
+        @keyframes floatDust {
+            0% { transform: translate(0px, 0px) scale(1); opacity: 0.1; }
+            100% { transform: translate(20px, -30px) scale(1.3); opacity: 0.25; }
         }
 
-        @keyframes leafSway {
-            0% { transform: rotate(-12deg) translateX(0px) scale(1); }
-            100% { transform: rotate(12deg) translateX(8px) scale(1.05); }
+        .gold-ring {
+            fill: none;
+            stroke: url(#goldGrad);
+            stroke-width: 1.5;
+            opacity: 0.5;
         }
 
-        /* ===== اعداد ساعت ===== */
-        .num {
-            fill: #e8d5a3;
-            font-size: 28px;
-            font-weight: 700;
-            text-anchor: middle;
-            dominant-baseline: central;
-            font-family: 'Playfair Display', serif;
-            text-shadow: 0 0 20px rgba(212,175,55,0.3);
+        /* ===== خطوط منحنی لوکس ===== */
+        .luxury-line {
+            fill: none;
+            stroke: url(#goldGrad);
+            stroke-width: 1.2;
+            opacity: 0.25;
         }
 
-        /* تیک‌ها */
+        /* ===== تیک‌های ساعت ===== */
         .tick {
             stroke: #b89d6b;
             stroke-width: 2;
@@ -137,197 +122,213 @@
             stroke-width: 4;
         }
 
-        /* ===== عقربه‌های لوکس ===== */
+        /* ===== اعداد طلایی ===== */
+        .num {
+            fill: #e8d5a3;
+            font-size: 26px;
+            font-weight: 700;
+            text-anchor: middle;
+            dominant-baseline: central;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 0 0 25px rgba(212,175,55,0.5);
+        }
+
+        /* ===== عقربه‌های کریستالی ===== */
         .hand {
             stroke-linecap: round;
-            transition: none;
         }
         #hour-hand {
             stroke: #f5e8c0;
             stroke-width: 7;
-            filter: drop-shadow(0 0 10px #d4af37);
+            filter: drop-shadow(0 0 15px #d4af37) drop-shadow(0 0 30px rgba(212,175,55,0.3));
         }
         #minute-hand {
             stroke: #f0e0b0;
             stroke-width: 5;
-            filter: drop-shadow(0 0 8px #d4af37);
+            filter: drop-shadow(0 0 12px #d4af37) drop-shadow(0 0 25px rgba(212,175,55,0.2));
         }
         #second-hand {
             stroke: #ff6b4a;
             stroke-width: 2.5;
-            filter: drop-shadow(0 0 14px #ff6b4a);
+            filter: drop-shadow(0 0 20px #ff6b4a) drop-shadow(0 0 40px rgba(255,107,74,0.3));
         }
 
-        /* نقطه مرکزی با الماس */
-        #center-gem {
-            fill: #d4af37;
-            filter: drop-shadow(0 0 20px #d4af37);
+        /* ===== الماس مرکزی ===== */
+        #center-diamond {
+            fill: url(#diamondGrad);
+            filter: drop-shadow(0 0 30px #d4af37);
         }
-        #center-gem-inner {
-            fill: #1a1a2e;
+        #center-diamond-inner {
+            fill: #0a0a12;
         }
 
-        /* ===== برند و تاریخ ===== */
+        /* ===== برند و تاریخ با کیفیت ===== */
         .brand {
             fill: #b89d6b;
             font-size: 11px;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             text-anchor: middle;
-            opacity: 0.7;
+            opacity: 0.8;
             font-family: 'Playfair Display', serif;
+            text-shadow: 0 0 15px rgba(212,175,55,0.3);
         }
         .date-text {
             fill: #c9b07a;
             font-size: 12px;
             text-anchor: middle;
             font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-        }
-
-        /* ===== مهتاب ===== */
-        .moon {
-            fill: #f5f0d7;
-            opacity: 0.15;
-            filter: blur(6px);
-            animation: moonGlow 6s ease-in-out infinite alternate;
-        }
-        @keyframes moonGlow {
-            0% { opacity: 0.1; transform: scale(1); }
-            100% { opacity: 0.25; transform: scale(1.1); }
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(212,175,55,0.2);
         }
 
         /* ===== واکنش‌گرایی ===== */
-        @media (max-width: 600px) {
-            .num { font-size: 18px; }
+        @media (max-width: 700px) {
+            .num { font-size: 20px; }
             #hour-hand { stroke-width: 5; }
             #minute-hand { stroke-width: 3.5; }
             #second-hand { stroke-width: 2; }
-            .brand { font-size: 9px; letter-spacing: 2px; }
+            .brand { font-size: 9px; letter-spacing: 3px; }
             .date-text { font-size: 10px; }
-            .leaf { --dur: 3s; }
         }
-        @media (max-width: 400px) {
-            .num { font-size: 14px; }
+        @media (max-width: 450px) {
+            .num { font-size: 15px; }
+            #hour-hand { stroke-width: 4; }
+            #minute-hand { stroke-width: 3; }
+            .brand { font-size: 7px; letter-spacing: 2px; }
+            .date-text { font-size: 8px; }
         }
     </style>
 </head>
 <body>
 
-<div class="scene">
-    <svg id="main-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+<div class="masterpiece">
+    <svg id="poster-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
 
-        <!-- ===== تعاریف اولیه ===== -->
+        <!-- ===== تعاریف گرادیان‌های با کیفیت ===== -->
         <defs>
-            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
+            <radialGradient id="bgGlow" cx="30%" cy="25%" r="80%">
+                <stop offset="0%" stop-color="#1e1e38" />
+                <stop offset="40%" stop-color="#12121e" />
+                <stop offset="100%" stop-color="#05050a" />
+            </radialGradient>
+
+            <radialGradient id="nebula1" cx="15%" cy="20%" r="60%">
+                <stop offset="0%" stop-color="#d4af37" stop-opacity="0.3" />
+                <stop offset="50%" stop-color="#8b6b2a" stop-opacity="0.1" />
+                <stop offset="100%" stop-color="#000" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="nebula2" cx="85%" cy="70%" r="50%">
+                <stop offset="0%" stop-color="#b8860b" stop-opacity="0.25" />
+                <stop offset="50%" stop-color="#d4af37" stop-opacity="0.08" />
+                <stop offset="100%" stop-color="#000" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="nebula3" cx="50%" cy="50%" r="40%">
+                <stop offset="0%" stop-color="#f9d976" stop-opacity="0.15" />
+                <stop offset="100%" stop-color="#000" stop-opacity="0" />
+            </radialGradient>
+
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#d4af37" />
+                <stop offset="50%" stop-color="#f9d976" />
+                <stop offset="100%" stop-color="#b8860b" />
+            </linearGradient>
+
+            <radialGradient id="diamondGrad" cx="40%" cy="35%" r="60%">
+                <stop offset="0%" stop-color="#f9d976" />
+                <stop offset="50%" stop-color="#d4af37" />
+                <stop offset="100%" stop-color="#8b6b2a" />
+            </radialGradient>
+
+            <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
                 <feComposite in="SourceGraphic" in2="blur" operator="over"/>
             </filter>
-            <filter id="leafShadow" x="-10%" y="-10%" width="120%" height="120%">
-                <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.4"/>
+
+            <filter id="strongGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="12" result="blur"/>
+                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
             </filter>
         </defs>
 
-        <!-- ===== پس‌زمینه آسمان شب ===== -->
-        <rect width="500" height="500" rx="250" fill="url(#skyGrad)"/>
-        <radialGradient id="skyGrad" cx="30%" cy="25%" r="80%">
-            <stop offset="0%" stop-color="#1e1e34"/>
-            <stop offset="100%" stop-color="#0a0a12"/>
-        </radialGradient>
+        <!-- ===== پس‌زمینه پوستر ===== -->
+        <rect width="600" height="600" rx="300" fill="url(#bgGlow)"/>
 
-        <!-- ===== مهتاب ===== -->
-        <circle cx="380" cy="80" r="40" class="moon"/>
-        <circle cx="380" cy="80" r="20" fill="#f5f0d7" opacity="0.1" filter="blur(10px)"/>
+        <!-- ===== سحابی‌های طلایی (کیفیت بالا) ===== -->
+        <ellipse cx="180" cy="150" rx="250" ry="200" fill="url(#nebula1)" class="nebula"/>
+        <ellipse cx="450" cy="420" rx="200" ry="180" fill="url(#nebula2)" class="nebula"/>
+        <circle cx="300" cy="300" r="180" fill="url(#nebula3)" class="nebula-dark"/>
 
-        <!-- ===== ستاره‌ها ===== -->
-        <circle cx="70" cy="50" r="2" class="star" style="animation-delay:0s;"/>
-        <circle cx="130" cy="30" r="1.5" class="star" style="animation-delay:0.7s;"/>
-        <circle cx="450" cy="40" r="2.5" class="star" style="animation-delay:1.2s;"/>
-        <circle cx="420" cy="150" r="1.8" class="star" style="animation-delay:0.4s;"/>
-        <circle cx="60" cy="140" r="2" class="star" style="animation-delay:1.8s;"/>
-        <circle cx="480" cy="230" r="1.5" class="star" style="animation-delay:2.5s;"/>
-        <circle cx="30" cy="300" r="2" class="star" style="animation-delay:0.9s;"/>
-        <circle cx="200" cy="20" r="1.2" class="star" style="animation-delay:1.5s;"/>
-        <circle cx="320" cy="60" r="1.8" class="star" style="animation-delay:2.1s;"/>
+        <!-- ===== خطوط منحنی لوکس (تزیین پوستر) ===== -->
+        <path class="luxury-line" d="M 30 300 Q 150 80 300 150 Q 450 220 570 300" opacity="0.3"/>
+        <path class="luxury-line" d="M 30 300 Q 150 520 300 450 Q 450 380 570 300" opacity="0.2"/>
+        <path class="luxury-line" d="M 300 30 Q 80 150 150 300 Q 220 450 300 570" opacity="0.25"/>
+        <path class="luxury-line" d="M 300 30 Q 520 150 450 300 Q 380 450 300 570" opacity="0.25"/>
+        <path class="luxury-line" d="M 50 150 Q 200 100 300 200 Q 400 300 550 250" opacity="0.15"/>
+        <path class="luxury-line" d="M 50 450 Q 200 500 300 400 Q 400 300 550 350" opacity="0.15"/>
 
-        <!-- ===== درخت ===== -->
-        <!-- تنه -->
-        <path class="tree-trunk" d="M 120 380 Q 130 320 140 280 Q 145 250 135 220 Q 120 190 100 170
-                 Q 80 155 60 150 Q 70 170 80 190 Q 95 210 105 240 Q 115 270 120 300 Q 125 340 120 380 Z"/>
-        <!-- شاخه اصلی چپ -->
-        <path class="branch" d="M 135 220 Q 100 180 70 140 Q 50 115 40 80"/>
-        <path class="branch branch-thin" d="M 100 180 Q 80 160 60 160"/>
-        <path class="branch branch-thin" d="M 80 155 Q 65 135 55 120"/>
-        <!-- شاخه اصلی راست -->
-        <path class="branch" d="M 140 250 Q 180 210 210 180 Q 230 160 250 140"/>
-        <path class="branch branch-thin" d="M 180 220 Q 200 200 220 200"/>
-        <path class="branch branch-thin" d="M 210 180 Q 230 170 245 175"/>
-        <!-- شاخه میانی -->
-        <path class="branch" d="M 130 270 Q 160 250 190 240 Q 220 235 240 240"/>
-        <path class="branch branch-thin" d="M 160 255 Q 180 240 200 245"/>
-        <!-- شاخه بالا -->
-        <path class="branch" d="M 130 200 Q 150 170 170 150 Q 190 135 200 120"/>
-        <path class="branch branch-thin" d="M 150 180 Q 140 160 130 150"/>
+        <!-- ===== حلقه‌های طلایی دور پوستر ===== -->
+        <circle cx="300" cy="300" r="280" class="gold-ring" stroke-width="2"/>
+        <circle cx="300" cy="300" r="260" class="gold-ring" stroke-width="1.5" opacity="0.3"/>
+        <circle cx="300" cy="300" r="240" class="gold-ring" stroke-width="1" opacity="0.2"/>
 
-        <!-- ===== برگ‌ها (با انیمیشن باد) ===== -->
-        <g filter="url(#leafShadow)">
-            <!-- برگ‌های سمت چپ -->
-            <path class="leaf leaf-light" d="M 70 140 Q 60 130 70 120 Q 80 130 70 140" style="--dur: 3.2s; animation-delay:0s; transform-origin: 70px 130px;"/>
-            <path class="leaf" d="M 55 120 Q 45 110 55 100 Q 65 110 55 120" style="--dur: 4.0s; animation-delay:0.5s; transform-origin: 55px 110px;"/>
-            <path class="leaf leaf-dark" d="M 80 160 Q 70 150 80 140 Q 90 150 80 160" style="--dur: 3.6s; animation-delay:1.2s; transform-origin: 80px 150px;"/>
-            <path class="leaf" d="M 60 160 Q 50 150 60 140 Q 70 150 60 160" style="--dur: 4.4s; animation-delay:0.3s; transform-origin: 60px 150px;"/>
-            <path class="leaf leaf-light" d="M 40 80 Q 30 70 40 60 Q 50 70 40 80" style="--dur: 3.0s; animation-delay:0.9s; transform-origin: 40px 70px;"/>
-            <path class="leaf" d="M 130 150 Q 120 140 130 130 Q 140 140 130 150" style="--dur: 3.8s; animation-delay:1.5s; transform-origin: 130px 140px;"/>
-
-            <!-- برگ‌های سمت راست -->
-            <path class="leaf leaf-dark" d="M 250 140 Q 240 130 250 120 Q 260 130 250 140" style="--dur: 4.2s; animation-delay:0.2s; transform-origin: 250px 130px;"/>
-            <path class="leaf leaf-light" d="M 220 200 Q 210 190 220 180 Q 230 190 220 200" style="--dur: 3.5s; animation-delay:1.0s; transform-origin: 220px 190px;"/>
-            <path class="leaf" d="M 245 175 Q 235 165 245 155 Q 255 165 245 175" style="--dur: 4.6s; animation-delay:0.7s; transform-origin: 245px 165px;"/>
-            <path class="leaf" d="M 210 180 Q 200 170 210 160 Q 220 170 210 180" style="--dur: 3.3s; animation-delay:1.8s; transform-origin: 210px 170px;"/>
-            <path class="leaf leaf-dark" d="M 240 240 Q 230 230 240 220 Q 250 230 240 240" style="--dur: 4.0s; animation-delay:0.4s; transform-origin: 240px 230px;"/>
-            <path class="leaf leaf-light" d="M 200 120 Q 190 110 200 100 Q 210 110 200 120" style="--dur: 3.7s; animation-delay:1.3s; transform-origin: 200px 110px;"/>
-
-            <!-- برگ‌های وسط (نزدیک تنه) -->
-            <path class="leaf" d="M 160 250 Q 150 240 160 230 Q 170 240 160 250" style="--dur: 4.8s; animation-delay:0.1s; transform-origin: 160px 240px;"/>
-            <path class="leaf leaf-light" d="M 180 220 Q 170 210 180 200 Q 190 210 180 220" style="--dur: 3.9s; animation-delay:1.6s; transform-origin: 180px 210px;"/>
-            <path class="leaf leaf-dark" d="M 140 180 Q 130 170 140 160 Q 150 170 140 180" style="--dur: 4.1s; animation-delay:0.6s; transform-origin: 140px 170px;"/>
+        <!-- ===== غبار طلایی (ذرات نورانی) ===== -->
+        <g filter="url(#softGlow)">
+            <circle cx="120" cy="100" r="4" class="gold-dust" style="animation-delay:0s;"/>
+            <circle cx="480" cy="90" r="5" class="gold-dust" style="animation-delay:0.7s;"/>
+            <circle cx="520" cy="480" r="3.5" class="gold-dust" style="animation-delay:1.2s;"/>
+            <circle cx="80" cy="520" r="4.5" class="gold-dust" style="animation-delay:0.4s;"/>
+            <circle cx="350" cy="60" r="3" class="gold-dust" style="animation-delay:1.8s;"/>
+            <circle cx="150" cy="530" r="4" class="gold-dust" style="animation-delay:2.5s;"/>
+            <circle cx="550" cy="300" r="3.5" class="gold-dust" style="animation-delay:0.9s;"/>
+            <circle cx="50" cy="300" r="4" class="gold-dust" style="animation-delay:1.5s;"/>
         </g>
+
+        <!-- ===== ستاره‌های چشمک‌زن ===== -->
+        <circle cx="200" cy="80" r="3" class="star-glow" style="animation-delay:0s;"/>
+        <circle cx="430" cy="60" r="2.5" class="star-glow" style="animation-delay:0.6s;"/>
+        <circle cx="560" cy="220" r="2" class="star-glow" style="animation-delay:1.2s;"/>
+        <circle cx="40" cy="250" r="2.5" class="star-glow" style="animation-delay:0.3s;"/>
+        <circle cx="70" cy="480" r="3" class="star-glow" style="animation-delay:1.7s;"/>
+        <circle cx="530" cy="400" r="2" class="star-glow" style="animation-delay:2.2s;"/>
 
         <!-- ===== تیک‌های ساعت ===== -->
         <g id="ticks"></g>
 
-        <!-- ===== اعداد ===== -->
+        <!-- ===== اعداد طلایی ===== -->
         <g id="numbers">
-            <text x="250" y="55"  class="num">۱۲</text>
-            <text x="347" y="95"  class="num">۱</text>
-            <text x="403" y="155" class="num">۲</text>
-            <text x="425" y="250" class="num">۳</text>
-            <text x="403" y="345" class="num">۴</text>
-            <text x="347" y="405" class="num">۵</text>
-            <text x="250" y="445" class="num">۶</text>
-            <text x="153" y="405" class="num">۷</text>
-            <text x="97"  y="345" class="num">۸</text>
-            <text x="75"  y="250" class="num">۹</text>
-            <text x="97"  y="155" class="num">۱۰</text>
-            <text x="153" y="95"  class="num">۱۱</text>
+            <text x="300" y="68"  class="num">۱۲</text>
+            <text x="407" y="112" class="num">۱</text>
+            <text x="468" y="178" class="num">۲</text>
+            <text x="490" y="300" class="num">۳</text>
+            <text x="468" y="422" class="num">۴</text>
+            <text x="407" y="488" class="num">۵</text>
+            <text x="300" y="532" class="num">۶</text>
+            <text x="193" y="488" class="num">۷</text>
+            <text x="132" y="422" class="num">۸</text>
+            <text x="110" y="300" class="num">۹</text>
+            <text x="132" y="178" class="num">۱۰</text>
+            <text x="193" y="112" class="num">۱۱</text>
         </g>
 
         <!-- ===== برند و تاریخ ===== -->
-        <text x="250" y="380" class="brand">TEHRAN</text>
-        <text x="250" y="397" class="brand" style="font-size:8px; letter-spacing:3px;">LUXURY</text>
-        <text id="dateDisplay" x="250" y="420" class="date-text"></text>
+        <text x="300" y="460" class="brand">TEHRAN</text>
+        <text x="300" y="480" class="brand" style="font-size:9px; letter-spacing:4px;">LUXURY</text>
+        <text id="dateDisplay" x="300" y="508" class="date-text"></text>
 
-        <!-- ===== عقربه‌ها ===== -->
-        <line id="hour-hand" class="hand" x1="250" y1="250" x2="250" y2="125"/>
-        <line id="minute-hand" class="hand" x1="250" y1="250" x2="250" y2="80"/>
-        <line id="second-hand" class="hand" x1="250" y1="260" x2="250" y2="65"/>
+        <!-- ===== عقربه‌های کریستالی ===== -->
+        <line id="hour-hand" class="hand" x1="300" y1="300" x2="300" y2="165"/>
+        <line id="minute-hand" class="hand" x1="300" y1="300" x2="300" y2="115"/>
+        <line id="second-hand" class="hand" x1="300" y1="310" x2="300" y2="95"/>
 
-        <!-- ===== نقطه مرکزی ===== -->
-        <circle id="center-gem" cx="250" cy="250" r="16"/>
-        <circle id="center-gem-inner" cx="250" cy="250" r="7"/>
+        <!-- ===== الماس مرکزی ===== -->
+        <circle id="center-diamond" cx="300" cy="300" r="18"/>
+        <circle id="center-diamond-inner" cx="300" cy="300" r="8"/>
 
-        <!-- حلقه تزیینی دور مرکز -->
-        <circle cx="250" cy="250" r="22" fill="none" stroke="#d4af37" stroke-width="1.5" opacity="0.5"/>
-        <circle cx="250" cy="250" r="28" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.3"/>
+        <!-- حلقه‌های تزیینی دور الماس -->
+        <circle cx="300" cy="300" r="28" fill="none" stroke="url(#goldGrad)" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="300" cy="300" r="35" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.3"/>
 
     </svg>
 </div>
@@ -342,11 +343,11 @@
         for (let i = 0; i < 60; i++) {
             const angle = i * 6;
             const rad = angle * Math.PI / 180;
-            const r1 = 225, r2 = (i % 5 === 0) ? 210 : 218;
-            const x1 = 250 + r1 * Math.sin(rad);
-            const y1 = 250 - r1 * Math.cos(rad);
-            const x2 = 250 + r2 * Math.sin(rad);
-            const y2 = 250 - r2 * Math.cos(rad);
+            const r1 = 270, r2 = (i % 5 === 0) ? 252 : 262;
+            const x1 = 300 + r1 * Math.sin(rad);
+            const y1 = 300 - r1 * Math.cos(rad);
+            const x2 = 300 + r2 * Math.sin(rad);
+            const y2 = 300 - r2 * Math.cos(rad);
             const line = document.createElementNS(svgNS, 'line');
             line.setAttribute('x1', x1);
             line.setAttribute('y1', y1);
@@ -362,40 +363,34 @@
         const secondHand = document.getElementById('second-hand');
         const dateDisplay = document.getElementById('dateDisplay');
 
-        // ===== ۳. تابع به‌روزرسانی ساعت =====
+        // ===== ۳. تابع به‌روزرسانی دقیق =====
         function updateClock() {
             const now = new Date();
-            // زمان ایران (UTC+3:30)
             const iranTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tehran' }));
             const h = iranTime.getHours() % 12;
             const m = iranTime.getMinutes();
             const s = iranTime.getSeconds();
             const ms = iranTime.getMilliseconds();
 
-            // زاویه‌ها
             const hourDeg = (h * 30) + (m * 0.5);
             const minuteDeg = (m * 6) + (s * 0.1);
             const secondDeg = (s * 6) + (ms * 0.006);
 
-            // اعمال چرخش
-            hourHand.setAttribute('transform', `rotate(${hourDeg}, 250, 250)`);
-            minuteHand.setAttribute('transform', `rotate(${minuteDeg}, 250, 250)`);
-            secondHand.setAttribute('transform', `rotate(${secondDeg}, 250, 250)`);
+            hourHand.setAttribute('transform', `rotate(${hourDeg}, 300, 300)`);
+            minuteHand.setAttribute('transform', `rotate(${minuteDeg}, 300, 300)`);
+            secondHand.setAttribute('transform', `rotate(${secondDeg}, 300, 300)`);
 
-            // ===== ۴. تاریخ شمسی =====
+            // تاریخ شمسی
             const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tehran' };
             const persianDate = new Intl.DateTimeFormat('fa-IR', options).format(iranTime);
             dateDisplay.textContent = persianDate;
         }
 
-        // ===== ۵. اجرا و تایمر =====
+        // ===== ۴. اجرا و تایمر =====
         updateClock();
         setInterval(updateClock, 100);
 
-        // ===== ۶. (اختیاری) تنظیم مجدد در صورت تغییر اندازه =====
-        // نیازی نیست چون SVG مقیاس‌پذیر است.
-
-        console.log('ساعت لوکس با درخت و باد اجرا شد!');
+        console.log('ساعت کهکشان طلایی با پوستر ۱۶K اجرا شد!');
     })();
 </script>
 
